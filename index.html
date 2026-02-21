@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Acceso al Proyecto</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #4e73df, #1cc88a);
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 0;
+        }
+
+        .contenedor {
+            background: white;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+            text-align: center;
+            width: 300px;
+        }
+
+        h2 {
+            margin-bottom: 20px;
+        }
+
+        input {
+            padding: 10px;
+            width: 100%;
+            margin-bottom: 15px;
+            border-radius: 6px;
+            border: 1px solid #ccc;
+        }
+
+        button {
+            padding: 10px;
+            width: 100%;
+            border: none;
+            border-radius: 6px;
+            background-color: #4e73df;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #2e59d9;
+        }
+    </style>
+
+    <script>
+        function verificar() {
+            var clave = document.getElementById("clave").value;
+
+            if (clave === "mate2026") {
+                window.location.href = "contenido.html";
+            } else {
+                alert("Contraseña incorrecta. Intenta nuevamente.");
+            }
+        }
+    </script>
+</head>
+
+<body>
+    <div class="contenedor">
+        <h2>🔐 Acceso al Proyecto</h2>
+        <input type="password" id="clave" placeholder="Ingresa la contraseña">
+        <button onclick="verificar()">Entrar</button>
+    </div>
+</body>
+</html>
