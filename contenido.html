@@ -1370,5 +1370,110 @@ window.addEventListener('scroll', () => {
   });
 }, { passive: true });
 </script>
+   <!-- ================= ZONA GAMER TIC ================= -->
+
+<section id="zona-gamer" style="background: linear-gradient(135deg,#0f0f1a,#1a1a2e);color:white;padding:80px 20px;text-align:center;font-family:'Epilogue',sans-serif;">
+  <div style="max-width:700px;margin:auto;background:#111827;padding:30px;border-radius:15px;box-shadow:0 0 25px #00f2ff55;">
+    
+    <h2 style="color:#00f2ff;margin-bottom:20px;">🎮 MISIÓN TIC 10°</h2>
+    
+    <div style="margin-bottom:15px;">
+      ❤️ Vidas: <span id="lives">3</span> | ⭐ Puntos: <span id="score">0</span>
+    </div>
+
+    <div style="height:10px;background:#333;border-radius:5px;margin-bottom:20px;overflow:hidden;">
+      <div id="progress" style="height:10px;background:#00f2ff;width:0%;transition:width 0.4s;"></div>
+    </div>
+
+    <div id="question" style="font-size:18px;margin-bottom:20px;"></div>
+
+    <div id="answers"></div>
+
+    <div id="feedback" style="margin-top:15px;font-size:14px;min-height:40px;"></div>
+
+    <button onclick="startGame()" style="margin-top:20px;padding:10px 20px;background:#00f2ff;border:none;border-radius:8px;cursor:pointer;font-weight:bold;">
+      Reiniciar Misión
+    </button>
+
+  </div>
+</section>
+
+<script>
+const questions = [
+  {q:"¿Qué es phishing?",a:["Un antivirus","Un ataque para robar información","Un tipo de red","Un hardware"],correct:1,explanation:"El phishing engaña para robar datos personales."},
+  {q:"¿Qué dispositivo conecta una red local a Internet?",a:["Monitor","Router","Teclado","Impresora"],correct:1,explanation:"El router conecta la red con Internet."},
+  {q:"¿Qué es la computación en la nube?",a:["Guardar en USB","Uso de servidores remotos","Software offline","Un antivirus"],correct:1,explanation:"La nube usa servidores remotos en Internet."},
+  {q:"¿Cuál es un ejemplo de software?",a:["RAM","Windows","Mouse","Disco duro"],correct:1,explanation:"Windows es un sistema operativo."},
+  {q:"¿Qué significa IA?",a:["Internet Avanzado","Inteligencia Artificial","Interfaz Automática","Integración Algorítmica"],correct:1,explanation:"IA significa Inteligencia Artificial."},
+  {q:"¿Cuál es una buena práctica de seguridad?",a:["Misma contraseña siempre","Compartir claves","Activar doble autenticación","No actualizar"],correct:2,explanation:"La autenticación en dos pasos mejora la seguridad."},
+  {q:"¿Qué tipo de red cubre una ciudad?",a:["LAN","MAN","PAN","WAN doméstica"],correct:1,explanation:"MAN es red metropolitana."},
+  {q:"¿Qué es Big Data?",a:["Disco duro grande","Grandes volúmenes de datos","Un virus","Editor de texto"],correct:1,explanation:"Big Data analiza grandes cantidades de datos."},
+  {q:"¿Qué componente almacena datos permanentemente?",a:["RAM","SSD","CPU","GPU"],correct:1,explanation:"El SSD guarda datos de forma permanente."},
+  {q:"¿Qué topología conecta todo a un nodo central?",a:["Anillo","Bus","Estrella","Malla"],correct:2,explanation:"La topología estrella usa un nodo central."}
+];
+
+let current=0,score=0,lives=3;
+
+function startGame(){
+  current=0;score=0;lives=3;
+  document.getElementById("score").textContent=score;
+  document.getElementById("lives").textContent=lives;
+  document.getElementById("feedback").textContent="";
+  loadQuestion();
+}
+
+function loadQuestion(){
+  if(current>=questions.length||lives<=0){endGame();return;}
+  const q=questions[current];
+  document.getElementById("question").textContent=q.q;
+  const answersDiv=document.getElementById("answers");
+  answersDiv.innerHTML="";
+  q.a.forEach((ans,i)=>{
+    const btn=document.createElement("button");
+    btn.textContent=ans;
+    btn.style.display="block";
+    btn.style.width="100%";
+    btn.style.margin="10px 0";
+    btn.style.padding="12px";
+    btn.style.background="#1f2937";
+    btn.style.color="white";
+    btn.style.border="1px solid #00f2ff";
+    btn.style.borderRadius="8px";
+    btn.style.cursor="pointer";
+    btn.onclick=()=>checkAnswer(i);
+    answersDiv.appendChild(btn);
+  });
+  document.getElementById("progress").style.width=((current/questions.length)*100)+"%";
+}
+
+function checkAnswer(i){
+  const q=questions[current];
+  const feedback=document.getElementById("feedback");
+  if(i===q.correct){
+    score+=10;
+    feedback.textContent="✅ Correcto. "+q.explanation;
+  }else{
+    lives--;
+    feedback.textContent="❌ Incorrecto. "+q.explanation;
+  }
+  document.getElementById("score").textContent=score;
+  document.getElementById("lives").textContent=lives;
+  current++;
+  setTimeout(loadQuestion,1500);
+}
+
+function endGame(){
+  let rank="Novato Digital";
+  if(score>=70) rank="Experto TIC";
+  if(score>=90) rank="Maestro TIC";
+  document.getElementById("question").textContent="🎉 Misión finalizada. Rango: "+rank;
+  document.getElementById("answers").innerHTML="";
+  document.getElementById("feedback").textContent="Puntaje final: "+score;
+}
+
+startGame();
+</script>
+
+<!-- ================= FIN ZONA GAMER TIC ================= -->
 </body>
 </html>
