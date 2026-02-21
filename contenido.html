@@ -1371,108 +1371,158 @@ window.addEventListener('scroll', () => {
 }, { passive: true });
 </script>
    <!-- ================= ZONA GAMER TIC ================= -->
+<!-- ================= ZONA GAMER TIC COMPLETA ================= -->
 
-<section id="zona-gamer" style="background: linear-gradient(135deg,#0f0f1a,#1a1a2e);color:white;padding:80px 20px;text-align:center;font-family:'Epilogue',sans-serif;">
-  <div style="max-width:700px;margin:auto;background:#111827;padding:30px;border-radius:15px;box-shadow:0 0 25px #00f2ff55;">
-    
-    <h2 style="color:#00f2ff;margin-bottom:20px;">🎮 MISIÓN TIC 10°</h2>
-    
-    <div style="margin-bottom:15px;">
-      ❤️ Vidas: <span id="lives">3</span> | ⭐ Puntos: <span id="score">0</span>
-    </div>
+<section id="zona-gamer" style="background:linear-gradient(135deg,#0f0f1a,#1a1a2e);color:white;padding:80px 20px;text-align:center;font-family:'Epilogue',sans-serif;">
 
-    <div style="height:10px;background:#333;border-radius:5px;margin-bottom:20px;overflow:hidden;">
-      <div id="progress" style="height:10px;background:#00f2ff;width:0%;transition:width 0.4s;"></div>
-    </div>
+<h2 style="color:#00f2ff;margin-bottom:30px;">🎮 ZONA GAMER TIC</h2>
 
-    <div id="question" style="font-size:18px;margin-bottom:20px;"></div>
+<div id="menu-juegos" style="max-width:800px;margin:auto;display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:15px;">
+  <button onclick="abrirJuego(1)" class="btn-game">🧠 Misión 1<br>Reto TIC</button>
+  <button onclick="abrirJuego(2)" class="btn-game">🔐 Misión 2<br>Caza al Hacker</button>
+  <button onclick="abrirJuego(3)" class="btn-game">💻 Misión 3<br>Hardware Battle</button>
+  <button onclick="abrirJuego(4)" class="btn-game">🌐 Misión 4<br>Arquitecto de Redes</button>
+  <button onclick="abrirJuego(5)" class="btn-game">🤖 Misión 5<br>Entrena tu IA</button>
+</div>
 
-    <div id="answers"></div>
+<div id="area-juego" style="margin-top:40px;"></div>
 
-    <div id="feedback" style="margin-top:15px;font-size:14px;min-height:40px;"></div>
-
-    <button onclick="startGame()" style="margin-top:20px;padding:10px 20px;background:#00f2ff;border:none;border-radius:8px;cursor:pointer;font-weight:bold;">
-      Reiniciar Misión
-    </button>
-
-  </div>
 </section>
 
+<style>
+.btn-game{
+  padding:15px;
+  background:#111827;
+  border:1px solid #00f2ff;
+  color:white;
+  border-radius:10px;
+  cursor:pointer;
+  transition:0.3s;
+  font-weight:bold;
+}
+.btn-game:hover{
+  background:#00f2ff;
+  color:black;
+}
+.opcion{
+  display:block;
+  margin:10px auto;
+  padding:10px;
+  width:100%;
+  max-width:400px;
+  background:#1f2937;
+  border:1px solid #00f2ff;
+  color:white;
+  border-radius:8px;
+  cursor:pointer;
+}
+.opcion:hover{
+  background:#00f2ff;
+  color:black;
+}
+</style>
+
 <script>
-const questions = [
-  {q:"¿Qué es phishing?",a:["Un antivirus","Un ataque para robar información","Un tipo de red","Un hardware"],correct:1,explanation:"El phishing engaña para robar datos personales."},
-  {q:"¿Qué dispositivo conecta una red local a Internet?",a:["Monitor","Router","Teclado","Impresora"],correct:1,explanation:"El router conecta la red con Internet."},
-  {q:"¿Qué es la computación en la nube?",a:["Guardar en USB","Uso de servidores remotos","Software offline","Un antivirus"],correct:1,explanation:"La nube usa servidores remotos en Internet."},
-  {q:"¿Cuál es un ejemplo de software?",a:["RAM","Windows","Mouse","Disco duro"],correct:1,explanation:"Windows es un sistema operativo."},
-  {q:"¿Qué significa IA?",a:["Internet Avanzado","Inteligencia Artificial","Interfaz Automática","Integración Algorítmica"],correct:1,explanation:"IA significa Inteligencia Artificial."},
-  {q:"¿Cuál es una buena práctica de seguridad?",a:["Misma contraseña siempre","Compartir claves","Activar doble autenticación","No actualizar"],correct:2,explanation:"La autenticación en dos pasos mejora la seguridad."},
-  {q:"¿Qué tipo de red cubre una ciudad?",a:["LAN","MAN","PAN","WAN doméstica"],correct:1,explanation:"MAN es red metropolitana."},
-  {q:"¿Qué es Big Data?",a:["Disco duro grande","Grandes volúmenes de datos","Un virus","Editor de texto"],correct:1,explanation:"Big Data analiza grandes cantidades de datos."},
-  {q:"¿Qué componente almacena datos permanentemente?",a:["RAM","SSD","CPU","GPU"],correct:1,explanation:"El SSD guarda datos de forma permanente."},
-  {q:"¿Qué topología conecta todo a un nodo central?",a:["Anillo","Bus","Estrella","Malla"],correct:2,explanation:"La topología estrella usa un nodo central."}
-];
+let xpGlobal = 0;
 
-let current=0,score=0,lives=3;
-
-function startGame(){
-  current=0;score=0;lives=3;
-  document.getElementById("score").textContent=score;
-  document.getElementById("lives").textContent=lives;
-  document.getElementById("feedback").textContent="";
-  loadQuestion();
+function abrirJuego(num){
+  document.getElementById("area-juego").innerHTML="";
+  if(num===1) juegoQuiz();
+  if(num===2) juegoHacker();
+  if(num===3) juegoHardware();
+  if(num===4) juegoRedes();
+  if(num===5) juegoIA();
 }
 
-function loadQuestion(){
-  if(current>=questions.length||lives<=0){endGame();return;}
-  const q=questions[current];
-  document.getElementById("question").textContent=q.q;
-  const answersDiv=document.getElementById("answers");
-  answersDiv.innerHTML="";
-  q.a.forEach((ans,i)=>{
-    const btn=document.createElement("button");
-    btn.textContent=ans;
-    btn.style.display="block";
-    btn.style.width="100%";
-    btn.style.margin="10px 0";
-    btn.style.padding="12px";
-    btn.style.background="#1f2937";
-    btn.style.color="white";
-    btn.style.border="1px solid #00f2ff";
-    btn.style.borderRadius="8px";
-    btn.style.cursor="pointer";
-    btn.onclick=()=>checkAnswer(i);
-    answersDiv.appendChild(btn);
-  });
-  document.getElementById("progress").style.width=((current/questions.length)*100)+"%";
+/* ================= JUEGO 1 ================= */
+function juegoQuiz(){
+  const preguntas=[
+    {q:"¿Qué es phishing?",a:["Antivirus","Ataque para robar datos","Tipo de red"],c:1},
+    {q:"¿Qué es la nube?",a:["USB","Servidor remoto","CPU"],c:1}
+  ];
+  lanzarQuiz(preguntas);
 }
 
-function checkAnswer(i){
-  const q=questions[current];
-  const feedback=document.getElementById("feedback");
-  if(i===q.correct){
-    score+=10;
-    feedback.textContent="✅ Correcto. "+q.explanation;
-  }else{
-    lives--;
-    feedback.textContent="❌ Incorrecto. "+q.explanation;
+/* ================= JUEGO 2 ================= */
+function juegoHacker(){
+  const preguntas=[
+    {q:"Recibes un correo que pide tu contraseña urgentemente. ¿Qué haces?",
+     a:["La envío","Ignoro y reporto","Hago clic en el enlace"],
+     c:1},
+    {q:"Encuentras una USB desconocida en el salón.",
+     a:["La conecto","La entrego al coordinador","La reviso en casa"],
+     c:1}
+  ];
+  lanzarQuiz(preguntas);
+}
+
+/* ================= JUEGO 3 ================= */
+function juegoHardware(){
+  const preguntas=[
+    {q:"¿La RAM es hardware o software?",a:["Hardware","Software"],c:0},
+    {q:"¿Windows es hardware o software?",a:["Hardware","Software"],c:1}
+  ];
+  lanzarQuiz(preguntas);
+}
+
+/* ================= JUEGO 4 ================= */
+function juegoRedes(){
+  const preguntas=[
+    {q:"¿Qué topología usa un nodo central?",a:["Estrella","Anillo"],c:0},
+    {q:"¿Qué dispositivo distribuye Internet?",a:["Router","Monitor"],c:0}
+  ];
+  lanzarQuiz(preguntas);
+}
+
+/* ================= JUEGO 5 ================= */
+function juegoIA(){
+  const preguntas=[
+    {q:"La IA aprende a partir de:",a:["Datos","Magia"],c:0},
+    {q:"Si le das más ejemplos correctos:",a:["Mejora","Empeora"],c:0}
+  ];
+  lanzarQuiz(preguntas);
+}
+
+/* ================= MOTOR GENERAL ================= */
+
+function lanzarQuiz(preguntas){
+  let actual=0;
+  let puntos=0;
+
+  function mostrar(){
+    if(actual>=preguntas.length){
+      xpGlobal+=puntos;
+      document.getElementById("area-juego").innerHTML=
+      `<h3>🎉 Misión completada</h3>
+       <p>Puntos obtenidos: ${puntos}</p>
+       <p>XP Global acumulada: ${xpGlobal}</p>`;
+      return;
+    }
+
+    const p=preguntas[actual];
+    let html=`<h3>${p.q}</h3>`;
+    p.a.forEach((op,i)=>{
+      html+=`<button class="opcion" onclick="responder(${i})">${op}</button>`;
+    });
+
+    document.getElementById("area-juego").innerHTML=html;
   }
-  document.getElementById("score").textContent=score;
-  document.getElementById("lives").textContent=lives;
-  current++;
-  setTimeout(loadQuestion,1500);
-}
 
-function endGame(){
-  let rank="Novato Digital";
-  if(score>=70) rank="Experto TIC";
-  if(score>=90) rank="Maestro TIC";
-  document.getElementById("question").textContent="🎉 Misión finalizada. Rango: "+rank;
-  document.getElementById("answers").innerHTML="";
-  document.getElementById("feedback").textContent="Puntaje final: "+score;
-}
+  window.responder=function(i){
+    if(i===preguntas[actual].c){
+      puntos+=10;
+    }
+    actual++;
+    mostrar();
+  }
 
-startGame();
+  mostrar();
+}
 </script>
+
+<!-- ================= FIN ZONA GAMER TIC ================= -->
+
+
 
 <!-- ================= FIN ZONA GAMER TIC ================= -->
 </body>
